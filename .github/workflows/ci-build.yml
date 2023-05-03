@@ -8,81 +8,87 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-cpu:
+#  build-cpu:
+#    runs-on: windows-2019
+#    env:
+#      BAZEL_PATH: "D:\\bazel.exe"
+#      TEMP: C:\\Users\\runneradmin\\Temp
+#      TMP: C:\\Users\\runneradmin\\Temp
+#      PYTHONUNBUFFERED: '1'
+#    steps:
+#    - name: Show user home
+#      run: ls ~
+#    - name: Show cpu info
+#      run: Get-CimInstance Win32_Processor
+#    - name: Show memory info
+#      run: Get-CimInstance Win32_PhysicalMemory | Format-Table Tag, DeviceLocator, Capacity, Speed
+#    - name: Configure pagefile
+#      uses: al-cheb/configure-pagefile-action@v1.2
+#      with:
+#        minimum-size: 8GB
+#        maximum-size: 32GB
+#        disk-root: "C:"
+#    - name: Show disk info
+#      run: Get-Volume -DriveLetter CD | Sort-Object DriveLetter
+#
+#    - uses: actions/checkout@v2
+#      with:
+#        submodules: true
+#
+#    - name: Download Bazelisk
+#      run: curl -k -L https://github.com/bazelbuild/bazelisk/releases/download/v1.10.1/bazelisk-windows-amd64.exe -o $env:BAZEL_PATH
+#
+#    - uses: actions/cache@v2
+#      with:
+#        path: ~\AppData\Local\pip\Cache
+#        key: ${{ runner.os }}-pip-${{ hashFiles('build-requirements.txt') }}
+#        restore-keys: |
+#          ${{ runner.os }}-pip-
+#
+#    #============#
+#    # Python 3.10 #
+#    #============#
+#    - name: py310
+#      uses: actions/setup-python@v2
+#      with:
+#        python-version: "3.10"
+#    - name: py310 pip install
+#      run: pip install -r "$env:GITHUB_WORKSPACE/build-requirements-py310.txt"
+#    - name: py310 build whl and upload
+#      run: |
+#        cd "$env:GITHUB_WORKSPACE/jax"
+#        ../bazel-build-cpu.ps1 -bazel_path $env:BAZEL_PATH
+
+  build-cuda117:
     runs-on: windows-2019
     env:
       BAZEL_PATH: "D:\\bazel.exe"
       TEMP: C:\\Users\\runneradmin\\Temp
       TMP: C:\\Users\\runneradmin\\Temp
       PYTHONUNBUFFERED: '1'
+
     steps:
     - name: Show user home
       run: ls ~
+
     - name: Show cpu info
       run: Get-CimInstance Win32_Processor
-    - name: Show memory info
-      run: Get-CimInstance Win32_PhysicalMemory | Format-Table Tag, DeviceLocator, Capacity, Speed
-    - name: Configure pagefile
-      uses: al-cheb/configure-pagefile-action@v1.2
-      with:
-        minimum-size: 8GB
-        maximum-size: 32GB
-        disk-root: "C:"
-    - name: Show disk info
-      run: Get-Volume -DriveLetter CD | Sort-Object DriveLetter
 
-    - uses: actions/checkout@v2
-      with:
-        submodules: true
-
-    - name: Download Bazelisk
-      run: curl -k -L https://github.com/bazelbuild/bazelisk/releases/download/v1.10.1/bazelisk-windows-amd64.exe -o $env:BAZEL_PATH
-
-    - uses: actions/cache@v2
-      with:
-        path: ~\AppData\Local\pip\Cache
-        key: ${{ runner.os }}-pip-${{ hashFiles('build-requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-
-    #============#
-    # Python 3.10 #
-    #============#
-    - name: py310
-      uses: actions/setup-python@v2
-      with:
-        python-version: "3.10"
-    - name: py310 pip install
-      run: pip install -r "$env:GITHUB_WORKSPACE/build-requirements-py310.txt"
-    - name: py310 build whl and upload
-      run: |
-        cd "$env:GITHUB_WORKSPACE/jax"
-        ../bazel-build-cpu.ps1 -bazel_path $env:BAZEL_PATH
-
-  build-cuda111:
-    runs-on: windows-2019
-    env:
-      BAZEL_PATH: "D:\\bazel.exe"
-      TEMP: C:\\Users\\runneradmin\\Temp
-      TMP: C:\\Users\\runneradmin\\Temp
-      PYTHONUNBUFFERED: '1'
-    steps:
-    - name: Show user home
-      run: ls ~
-    - name: Show cpu info
-      run: Get-CimInstance Win32_Processor
     - name: Limit cpu
       run: |
         $p = Get-CimInstance Win32_Processor
         if ($p.Name -match "E5-") { throw "CPU is too old!" }
+
     - name: Show memory info
       run: Get-CimInstance Win32_PhysicalMemory | Format-Table Tag, DeviceLocator, Capacity, Speed
+
     - name: Configure pagefile
       uses: al-cheb/configure-pagefile-action@v1.2
       with:
         minimum-size: 8GB
         maximum-size: 32GB
         disk-root: "C:"
+
     - name: Show disk info
       run: Get-Volume -DriveLetter CD | Sort-Object DriveLetter
 
@@ -93,12 +99,16 @@ jobs:
     - name: Download Bazelisk
       run: curl -k -L https://github.com/bazelbuild/bazelisk/releases/download/v1.10.1/bazelisk-windows-amd64.exe -o $env:BAZEL_PATH
 
-    - name: Install CUDA 11.1
-      run: |
-        curl -k -L https://whls.blob.core.windows.net/ci-files/v11.1.7z -o cuda.7z
-        7z x cuda.7z -o'D:/CUDA'
-        rm cuda.7z
-        ls D:/CUDA/v11.1
+    - uses: Jimver/cuda-toolkit@v0.2.10
+      id: cuda-toolkit
+      with:
+        method: 'network'
+        cuda: '11.7.1'
+        sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "cublas", "cublas_dev", "nvjpeg", "nvjpeg_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration", "thrust"]'
+
+    - name: install cudnn
+      shell: pwsh
+      run: .\scripts\install_cuda.ps1
 
     - uses: actions/cache@v2
       with:
@@ -119,4 +129,12 @@ jobs:
     - name: py310 build whl and upload
       run: |
         cd "$env:GITHUB_WORKSPACE/jax"
-        ../bazel-build-cuda.ps1 -bazel_path $env:BAZEL_PATH -cuda_version '11.1' -cuda_prefix 'D:/CUDA'
+        ../bazel-build-cuda.ps1 -bazel_path $env:BAZEL_PATH -cuda_version '11.7'
+
+    - name: Archive production artifacts build
+      uses: actions/upload-artifact@v3
+      with:
+        name: jax-library
+        path: |
+          ./dist/*.whl
+          ./bazel-dist/*.whl

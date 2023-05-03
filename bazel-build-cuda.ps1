@@ -6,7 +6,7 @@ param(
     # [String]$conda_env,
 
     [Parameter(Mandatory = $true)]
-    [ValidateSet('11.2', '11.1', '10.1')]
+    [ValidateSet('11.7', '11.2', '11.1', '10.1')]
     $cuda_version,
 
     [Parameter(Mandatory = $false)]
@@ -20,6 +20,9 @@ $ErrorActionPreference = "Stop"
 $msys2_path = "C:\msys64\usr\bin"
 
 switch ($cuda_version) {
+    '11.7' {
+        $cudnn_version = '8.5.0'
+    }
     '11.2' {
         $cudnn_version = '8.2.2'
     }
