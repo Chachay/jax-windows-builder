@@ -12,8 +12,8 @@ jobs:
     runs-on: windows-2022
     env:
       BAZEL_PATH: "D:\\bazel.exe"
-      TEMP: C:\\Users\\runneradmin\\Temp
-      TMP: C:\\Users\\runneradmin\\Temp
+      #TEMP: C:\\Users\\runneradmin\\Temp
+      #TMP: C:\\Users\\runneradmin\\Temp
       PYTHONUNBUFFERED: '1'
 
     steps:
