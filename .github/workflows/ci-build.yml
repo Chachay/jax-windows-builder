@@ -68,6 +68,17 @@ jobs:
       PYTHONUNBUFFERED: '1'
 
     steps:
+    - uses: Jimver/cuda-toolkit@v0.2.10
+      id: cuda-toolkit
+      with:
+        method: 'network'
+        cuda: '11.7.1'
+        sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "cublas", "cublas_dev", "nvjpeg", "nvjpeg_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration", "thrust"]'
+
+    - name: install cudnn
+      shell: pwsh
+      run: .\scripts\install_cuda.ps1
+
     - name: Show user home
       run: ls ~
 
@@ -99,16 +110,6 @@ jobs:
     - name: Download Bazelisk
       run: curl -k -L https://github.com/bazelbuild/bazelisk/releases/download/v1.10.1/bazelisk-windows-amd64.exe -o $env:BAZEL_PATH
 
-    - uses: Jimver/cuda-toolkit@v0.2.10
-      id: cuda-toolkit
-      with:
-        method: 'network'
-        cuda: '11.7.1'
-        sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "cublas", "cublas_dev", "nvjpeg", "nvjpeg_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration", "thrust"]'
-
-    - name: install cudnn
-      shell: pwsh
-      run: .\scripts\install_cuda.ps1
 
     - uses: actions/cache@v2
       with:
