@@ -70,4 +70,4 @@ jobs:
           name: jax-library
           path: |
             ./dist/*.whl
-            ./bazel-dist/*.whl
+            ./bazel-dist/**/*.whl
