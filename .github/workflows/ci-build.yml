@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-cuda117:
+  build-cuda111:
     runs-on: windows-2019
     env:
       BAZEL_PATH: "D:\\bazel.exe"
@@ -26,7 +26,7 @@ jobs:
         with:
           method: 'network'
           cuda: '11.1.1'
-          sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "nvtx" ,"cublas", "cublas_dev", "nvjpeg", "nvjpeg_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration", "thrust"]'
+          sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "nsight_nvtx" ,"cublas", "cublas_dev", "nvjpeg", "nvjpeg_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration", "thrust"]'
 
       - name: install cudnn
         shell: pwsh
