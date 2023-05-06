@@ -25,8 +25,9 @@ jobs:
         id: cuda-toolkit
         with:
           method: 'network'
-          cuda: '11.1.1'
-          sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "nsight_nvtx" ,"cublas", "cublas_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration"]'
+          cuda: '11.3.1'
+          sub-packages: '["cuda_cudart", "cuda_cuobjdump", "cuda_cupti", "cuda_cuxxfilt", "cuda_demo_suite", "cuda_documentation", "cuda_memcheck", "cuda_nvcc", "cuda_nvdisasm", "cuda_nvml_dev", "cuda_nvprof", "cuda_nvprune", "cuda_nvrtc", "cuda_nvtx", "cuda_nvvp", "cuda_sanitizer_api", "cuda_thrust", "libcublas", "libcufft", "libcurand", "libcusolver", "libcusparse", "libnpp", "libnvjpeg", "nsight_compute", "nsight_nvtx", "nsight_systems", "nsight_vse", "visual_studio_integration"]'
+          #sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "nsight_nvtx" ,"cublas", "cublas_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration"]'
 
       - name: install cudnn
         shell: pwsh
@@ -48,21 +49,18 @@ jobs:
           path: D:/bzl_out
           key: bazel-v1-cache
 
-      #=============#
-      # Python 3.10 #
-      #=============#
-      - name: py310
+      - name: py309
         uses: actions/setup-python@v2
         with:
-          python-version: "3.10"
+          python-version: "3.9"
 
-      - name: py310 pip install
-        run: pip install -r "$env:GITHUB_WORKSPACE/build-requirements-py310.txt"
+      - name: py39 pip install
+        run: pip install -r "$env:GITHUB_WORKSPACE/build-requirements.txt"
 
       - name: py310 build whl
         run: |
           cd "$env:GITHUB_WORKSPACE/jax"
-          ../bazel-build-cuda.ps1 -bazel_path $env:BAZEL_PATH -cuda_version '11.1'
+          ../bazel-build-cuda.ps1 -bazel_path $env:BAZEL_PATH -cuda_version '11.3'
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
