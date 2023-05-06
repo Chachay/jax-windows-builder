@@ -22,9 +22,7 @@ Expand-Archive -Path cudnn.zip -DestinationPath "d:\a\cudnn"
 #Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\bin\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\bin"
 #Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\lib\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\lib"
 #Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\include\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include"
-Copy-Item -Path "d:\a\cudnn\cuda\bin\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin"
-Copy-Item -Path "d:\a\cudnn\cuda\lib\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.1\lib"
-Copy-Item -Path "d:\a\cudnn\cuda\include\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include"
+Copy-Item -Path "d:\a\cudnn\cuda\*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.1" -Recurse
 
 #Write-Output "CUDA Installation completed "
 
