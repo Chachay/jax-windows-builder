@@ -25,7 +25,7 @@ jobs:
         id: cuda-toolkit
         with:
           method: 'network'
-          cuda: '11.7.1'
+          cuda: '11.1.1'
           sub-packages: '["nvcc", "cupti", "visual_profiler", "nvprof", "nvtx" ,"cublas", "cublas_dev", "nvjpeg", "nvjpeg_dev", "npp", "npp_dev", "cufft", "cufft_dev", "nvrtc", "nvrtc_dev", "curand", "curand_dev", "cusolver", "cusolver_dev", "cusparse", "cusparse_dev", "nvml_dev", "cudart", "visual_studio_integration", "thrust"]'
 
       - name: install cudnn
@@ -62,7 +62,7 @@ jobs:
       - name: py310 build whl
         run: |
           cd "$env:GITHUB_WORKSPACE/jax"
-          ../bazel-build-cuda.ps1 -bazel_path $env:BAZEL_PATH -cuda_version '11.7'
+          ../bazel-build-cuda.ps1 -bazel_path $env:BAZEL_PATH -cuda_version '11.1'
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3

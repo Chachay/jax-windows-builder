@@ -8,7 +8,8 @@
 #}
 
 Write-Output "Downloading cudnn"
-Invoke-WebRequest https://developer.download.nvidia.com/compute/redist/cudnn/v8.5.0/local_installers/11.7/cudnn-windows-x86_64-8.5.0.96_cuda11-archive.zip -OutFile cudnn.zip | Out-Null
+#Invoke-WebRequest https://developer.download.nvidia.com/compute/redist/cudnn/v8.5.0/local_installers/11.7/cudnn-windows-x86_64-8.5.0.96_cuda11-archive.zip -OutFile cudnn.zip | Out-Null
+Invoke-WebRequest https://developer.download.nvidia.com/compute/redist/cudnn/v8.2.2/cudnn-11.4-windows-x64-v8.2.2.26.zip -OutFile cudnn.zip | Out-Null
 
 if(Test-Path -Path ".\cudnn.zip"){
   Write-Output "Completed"
@@ -18,9 +19,12 @@ if(Test-Path -Path ".\cudnn.zip"){
 }
 Expand-Archive -Path cudnn.zip -DestinationPath "d:\a\cudnn"
 
-Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\bin\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\bin"
-Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\lib\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\lib"
-Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\include\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include"
+#Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\bin\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\bin"
+#Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\lib\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\lib"
+#Copy-Item -Path "d:\a\cudnn\cudnn-windows-x86_64-8.5.0.96_cuda11-archive\include\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.7\include"
+Copy-Item -Path "d:\a\cudnn\cuda\bin\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.1\bin"
+Copy-Item -Path "d:\a\cudnn\cuda\lib\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.1\lib"
+Copy-Item -Path "d:\a\cudnn\cuda\include\*.*" -Destination "$($Env:ProgramFiles)\NVIDIA GPU Computing Toolkit\CUDA\v11.1\include"
 
 #Write-Output "CUDA Installation completed "
 
